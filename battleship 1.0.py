@@ -12,16 +12,16 @@ if __name__ == "__main__":
     ship_counter = 0 
     row_num = [" ", "1","2", "3", "4"]
     grid.append(row_num)
-    for i in range(4):
+    for rand_row in range(4):
         roworder = 0
         row_letter = ["A", "B", "C", "D"]
-        row = [f"{row_letter[i]}", 0,0,0,0]
+        row = [f"{row_letter[rand_row]}", 0,0,0,0]
         grid.append(row)
-        i+=1
-        for j in range(4):
+        rand_row+=1
+        for order in range(4):
             number = random.randint(1,4)
             if number == 4:
-                grid[i][j+1] = 1
+                grid[rand_row][order+1] = 1
                 ship_counter += 1
 
     for row in user_grid:
@@ -33,7 +33,6 @@ if __name__ == "__main__":
     print("If you hit a ship an O will be on the board, otherwise it will be an X.")
 
     while True:
-
         if ship_counter == 0:
             print("\nAll ships hit! You won!")
             break
@@ -62,7 +61,7 @@ if __name__ == "__main__":
                 print("\nMissed")
                 print(f"There are {ship_counter} ships on the board.")
                 for row in user_grid:
-                    print(f"\n{row[0]} {row[1]} {row[2]} {row[3]} {row[4]}")
+                    print(f"{row[0]} {row[1]} {row[2]} {row[3]} {row[4]}")
                 
             else:
                 user_grid[rowindex][column] = "O"
@@ -70,5 +69,5 @@ if __name__ == "__main__":
                 ship_counter -= 1
                 print(f"There are {ship_counter} ships on the board.")
                 for row in user_grid:
-                    print(f"\n{row[0]} {row[1]} {row[2]} {row[3]} {row[4]}")
+                    print(f"{row[0]} {row[1]} {row[2]} {row[3]} {row[4]}")
 
