@@ -1,4 +1,6 @@
 # Battle ship 1.0 stage: Nate S and Trusha
+
+# Done with 1.0 stage
 import random
 
 if __name__ == "__main__":
@@ -8,7 +10,6 @@ if __name__ == "__main__":
                  ["B", " ", " ", " ", " "],
                  ["C", " ", " ", " ", " "],
                  ["D", " ", " ", " ", " "]]
-    spots = []
     ship_counter = 0 
     row_num = [" ", "1","2", "3", "4"]
     grid.append(row_num)
