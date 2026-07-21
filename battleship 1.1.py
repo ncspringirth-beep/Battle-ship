@@ -93,34 +93,17 @@ if __name__ == "__main__":
                 print(f"Placed ship on {ship_placement}")
                 num_ships_avaliable -= 1
                 column = int(ship_placement[1])
-                for row in range(grid_size):
-                    if ship_placement[0] == "A":
-                        rowindex = 1
-                    elif ship_placement[0] == "B":
-                        rowindex = 2
-                    elif ship_placement[0] == "C":
-                        rowindex = 3
-                    elif ship_placement[0] == "D":
-                        rowindex = 4
-                    elif ship_placement[0] == "E":
-                        rowindex = 5
-                    elif ship_placement[0] == "F":
-                        rowindex = 6
-                    elif ship_placement[0] == "G":
-                        rowindex = 7
-                    elif ship_placement[0] == "H":
-                        rowindex = 8
-                    elif ship_placement[0] == "I":
-                        rowindex = 9
-                    elif ship_placement[0] == "J":
-                        rowindex = 10
-                    else:
-                        print("Please enter a correct coordinate.")
-
-                    grid[rowindex][column] = 1
-
+                order_row = 0
+                for specific_let in row_letter:
+                    order_row += 1
+                    if ship_placement[0] == specific_let:
+                        rowindex = order_row
+                        
+                grid[rowindex][column] = 1
+            else:
+                print("Please enter a valid ship coordinate.")
     for row in user_grid:
-        print(f"{row[0]} {row[1]} {row[2]} {row[3]} {row[4]}")
+        print(*row)
     
     print(f"There are {num_ships} ships on the board.")
     print("If you hit a ship an O will be on the board, otherwise it will be an X.")
@@ -136,30 +119,28 @@ if __name__ == "__main__":
         else:
             while True:
                 user_guess = input("\nPlease enter your guess (A1): ")
-                if user_guess in user_choices:
-                        user_guesses_list.append(user_guess)
-                        break
+                if user_guess not in user_guesses_list:
+                    if user_guess[0] in row_letter and user_guess[1] in row_num:
+                            user_guesses_list.append(user_guess)
+                            break
                 else:
                     print("Please enter a valid guess.")
 
-            rowindex = 0
+            order_row = 0
             column = int(user_guess[1])
+            
+            for specific_letter in row_letter:
+                order_row += 1
+                if user_guess[0] == specific_letter:
+                    rowindex = order_row
 
-            if user_guess[0] == "A":
-                rowindex = 1
-            elif user_guess[0] == "B":
-                rowindex = 2
-            elif user_guess[0] == "C":
-                rowindex = 3
-            elif user_guess[0] == "D":
-                rowindex = 4
             if grid[rowindex][column] == 0:
                 user_grid[rowindex][column] = "X"
                 print("\nMissed")
                 chances += 1
                 print(f"There are {ship_counter} ships on the board.")
                 for row in user_grid:
-                    print(f"{row[0]} {row[1]} {row[2]} {row[3]} {row[4]}")
+                    print(*row)
                 
             else:
                 user_grid[rowindex][column] = "O"
@@ -167,5 +148,5 @@ if __name__ == "__main__":
                 ship_counter -= 1
                 print(f"There are {ship_counter} ships on the board.")
                 for row in user_grid:
-                    print(f"{row[0]} {row[1]} {row[2]} {row[3]} {row[4]}")
+                    print(*row)
 
