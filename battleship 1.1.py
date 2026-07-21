@@ -72,19 +72,18 @@ if __name__ == "__main__":
         random_row += 1
         
     if placement_choice == "R":
-        for rand_row in range(grid_size):
-            if ship_counter == num_ships:
+        order = 0
+        while True:
+            if order == num_ships:
                 break
             else:
-                for order in range(grid_size):
-                    number = random.randint(1,4)
-                    if number == 4:
-                        if grid[0]:
-                            continue
-                        else:
-                            grid[rand_row][order+1] = 1
-                            ship_counter += 1
-                    print("")
+                randomList = random.randint(1, grid_size)
+                randomSpot = random.randint(1, grid_size)
+                if grid[randomList][randomSpot] != 0:
+                    continue
+                else:
+                    grid[randomList][randomSpot] = 1
+                    order += 1
     else:
         num_ships_avaliable = num_ships
         while num_ships_avaliable != 0:
