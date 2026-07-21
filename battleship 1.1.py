@@ -11,6 +11,7 @@ if __name__ == "__main__":
     row_num = [" ", "1","2", "3", "4", "5", "6", "7", "8", "9", "10"]
     row_letter = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
     user_guesses_list = []
+    let_list = []
     chances = 0
 
     while True:
@@ -70,7 +71,15 @@ if __name__ == "__main__":
                 user_row.append(zero)
         user_grid.append(user_row)
         random_row += 1
-        
+    
+    let_row = 0
+    for let in row_letter:
+        if let_row > grid_size:
+            break
+        else: 
+            let_list.append(let)
+            let_row += 1
+
     if placement_choice == "R":
         order = 0
         while True:
@@ -88,12 +97,12 @@ if __name__ == "__main__":
         num_ships_avaliable = num_ships
         while num_ships_avaliable != 0:
             ship_placement = input("Where would you like to place the ship (Ex: A1):")
-            if ship_placement[0] in row_letter and ship_placement[1] in row_num:
+            if len(ship_placement) == 2 and ship_placement[0] in let_list and ship_placement[1] in numbers_list:
                 print(f"Placed ship on {ship_placement}")
                 num_ships_avaliable -= 1
                 column = int(ship_placement[1])
                 order_row = 0
-                for specific_let in row_letter:
+                for specific_let in let_list:
                     order_row += 1
                     if ship_placement[0] == specific_let:
                         rowindex = order_row
@@ -119,7 +128,7 @@ if __name__ == "__main__":
             while True:
                 user_guess = input("\nPlease enter your guess (A1): ")
                 if user_guess not in user_guesses_list:
-                    if user_guess[0] in row_letter and user_guess[1] in row_num:
+                    if user_guess[0] in let_list and user_guess[1] in user_numbers_list:
                             user_guesses_list.append(user_guess)
                             break
                 else:
@@ -128,7 +137,7 @@ if __name__ == "__main__":
             order_row = 0
             column = int(user_guess[1])
             
-            for specific_letter in row_letter:
+            for specific_letter in let_list:
                 order_row += 1
                 if user_guess[0] == specific_letter:
                     rowindex = order_row
