@@ -108,10 +108,10 @@ if __name__ == "__main__":
             if player_grid[randomList][randomSpot] != 0:
                 continue
             else:
-                randomSecondSpot = random.randint(1, 4)
-                if randomSecondSpot == 1:
+                randomDirection = random.randint(1, 4)
+                # 1 = down
+                if randomDirection == 1:
                     try:
-
                         if player_grid[randomList - 1][randomSpot] != 0:
                             continue
                         else:
@@ -120,7 +120,8 @@ if __name__ == "__main__":
                             break
                     except:
                         continue
-                if randomSecondSpot == 2:
+                # 2 = up
+                if randomDirection == 2:
                     try:
                         if player_grid[randomList + 1][randomSpot] != 0:
                             continue
@@ -130,7 +131,8 @@ if __name__ == "__main__":
                             break
                     except:
                         continue
-                if randomSecondSpot == 3:
+                # 3 = right
+                if randomDirection == 3:
                     try:
                         if player_grid[randomList][randomSpot + 1] != 0:
                             continue
@@ -140,7 +142,8 @@ if __name__ == "__main__":
                             break
                     except:
                         continue
-                if randomSecondSpot == 4:
+                # 4 = left
+                if randomDirection == 4:
                     try:
                         if player_grid[randomList][randomSpot] != 0:
                             continue
@@ -150,8 +153,6 @@ if __name__ == "__main__":
                             break
                     except:
                         continue
-                        
-    
     
     # Computers ship player guess
     shipNumber = 1 
@@ -170,45 +171,62 @@ if __name__ == "__main__":
             if comp_grid[randomList][randomSpot] != 0:
                 continue
             else:
-                randomSecondSpot = random.randint(1, 4)
-                if randomSecondSpot == 1:
-                    if comp_grid[randomList - 1][randomSpot] != 0:
+                randomDirection = random.randint(1, 4)
+                # 1 = down
+                if randomDirection == 1:
+                    try:
+                        if comp_grid[randomList - 1][randomSpot] != 0:
+                            continue
+                        else:
+                            comp_grid[randomList][randomSpot] = shipNumber
+                            comp_grid[randomList - 1][randomSpot] = shipNumber
+                            break
+                    except:
                         continue
-                    else:
-                        comp_grid[randomList][randomSpot] = shipNumber
-                        comp_grid[randomList - 1][randomSpot] = shipNumber
-                        break
-                if randomSecondSpot == 2:
-                    if comp_grid[randomList + 1][randomSpot] != 0:
+                # 2 = up
+                if randomDirection == 2:
+                    try:
+                        if comp_grid[randomList + 1][randomSpot] != 0:
+                            continue
+                        else:
+                            comp_grid[randomList][randomSpot] = shipNumber
+                            comp_grid[randomList + 1][randomSpot] = shipNumber
+                            break
+                    except:
                         continue
-                    else:
-                        comp_grid[randomList][randomSpot] = shipNumber
-                        comp_grid[randomList + 1][randomSpot] = shipNumber
-                        break
-                if randomSecondSpot == 3:
-                    if comp_grid[randomList][randomSpot + 1] != 0:
+                # 3 = right
+                if randomDirection == 3:
+                    try:
+                        if comp_grid[randomList][randomSpot + 1] != 0:
+                            continue
+                        else:
+                            comp_grid[randomList][randomSpot] = shipNumber
+                            comp_grid[randomList][randomSpot + 1] = shipNumber
+                            break
+                    except:
                         continue
-                    else:
-                        comp_grid[randomList][randomSpot] = shipNumber
-                        comp_grid[randomList][randomSpot + 1] = shipNumber
-                        break
-                if randomSecondSpot == 4:
-                    if comp_grid[randomList][randomSpot - 1] != 0:
+                # 4 = left
+                if randomDirection == 4:
+                    try:
+                        if comp_grid[randomList][randomSpot - 1] != 0:
+                            continue
+                        else:
+                            comp_grid[randomList][randomSpot] = shipNumber
+                            comp_grid[randomList][randomSpot - 1] = shipNumber
+                            break
+                    except:
                         continue
-                    else:
-                        comp_grid[randomList][randomSpot] = shipNumber
-                        comp_grid[randomList][randomSpot - 1] = shipNumber
-                        break
 
 
     print(f"There are {num_ships} ships on the board.")
     print("If you hit a ship an O will be on the board, otherwise it will be an X.")
     
-    ship_counter_player = 2
-    Destroyer_player = 2
-    ship_counter_computer = 2
-    Destroyer_Computer = 2
+    ship_counter_player = num_ships
+    destroyer_player = 2
+    ship_counter_computer = num_ships
+    destroyer_computer = 2
     player_turn = True
+    
     while True:
         print("Player Board:")
         for row in player_grid:
@@ -216,7 +234,7 @@ if __name__ == "__main__":
         print("\nComputers Board")
         for row in comp_grid_hidden:
             print(*row)
-
+        
         if ship_counter_player == 0:
             print("\nPlayer Wins! All computer ships hit! You won!")
             break
@@ -245,35 +263,32 @@ if __name__ == "__main__":
             if comp_grid[rowindex][column] == 0:
                 comp_grid_hidden[rowindex][column] = "X"
                 print("\nMissed")
-                print(f"There is {ship_counter_player} ships on the board.")
+                print(f"There are {ship_counter_player} ships on the board.")
                 print(" ")
                 player_turn = False
             elif comp_grid[rowindex][column] == 1:
-                comp_grid_hidden[rowindex][column] = "0"
+                comp_grid_hidden[rowindex][column] = "C"
                 print("\nCorrect. You hit a dingy")
                 ship_counter_player -= 1
-                print(f"There is {ship_counter_player} ships on the board.")
+                print(f"There are {ship_counter_player} ships on the board.")
                 print(" ")   
                 player_turn = False
             elif comp_grid[rowindex][column] == 2:
-                comp_grid_hidden[rowindex][column] = "0"
+                comp_grid_hidden[rowindex][column] = "C"
                 print("\nCorrect. You partially hit a destroyer")
-                Destroyer_player -= 1
-                if Destroyer_player == 0:
+                destroyer_player -= 1
+                if destroyer_player == 0:
                     ship_counter_player -= 1
-                print(f"There is {ship_counter_player} ships on the board.")
+                print(f"There are {ship_counter_player} ships on the board.")
                 print(" ")
-                        
                 player_turn = False
-                
-            
 
         elif player_turn == False:
             print("\nComputer's turn: ")
             while True:
                 comp_guess_list = random.randint(1, grid_size)
                 comp_guess_spot = random.randint(1, grid_size)
-                if player_grid[comp_guess_list][comp_guess_spot] == 0:
+                if comp_grid[comp_guess_list][comp_guess_spot] == 0:
                     player_grid[comp_guess_list][comp_guess_spot] = "X"
                     letter_order = 0
                     for letter in row_letter:
@@ -284,35 +299,31 @@ if __name__ == "__main__":
                     print(" ")
                     player_turn = True
                     break
-                elif player_grid[comp_guess_list][comp_guess_spot] == 1:
-                    player_grid[comp_guess_list][comp_guess_spot] = "O"
+                elif comp_grid[comp_guess_list][comp_guess_spot] == 1:
+                    player_grid[comp_guess_list][comp_guess_spot] = "C"
+                    print("\n Computer hit a dingy!")
                     letter_order = 0
                     for letter in row_letter:
                         letter_order += 1
                         if comp_guess_list == letter_order:
                             comp_guess_list = letter
-                    print(f"Computer choose coordinate {comp_guess_list}{comp_guess_spot} and guessed correctly, sinking dingy.")
+                    print(f"Computer choose coordinate {comp_guess_list}{comp_guess_spot} and guessed correctly.")
                     ship_counter_computer -= 1
-                    print(" ")
-                    player_turn = True    
+                    print(" ")    
                     break
-                elif player_grid[comp_guess_list][comp_guess_spot] == 2:
-                    player_grid[comp_guess_list][comp_guess_spot] = "O"
+                elif comp_grid[comp_guess_list][comp_guess_spot] == 2:
+                    player_grid[comp_guess_list][comp_guess_spot] = "C"
+                    print("\nComputer partially hit a destroyer")
                     letter_order = 0
                     for letter in row_letter:
                         letter_order += 1
                         if comp_guess_list == letter_order:
-                             comp_guess_list = letter
+                            comp_guess_list = letter
                     print(f"Computer choose coordinate {comp_guess_list}{comp_guess_spot} and guessed correctly.")
-                    Destroyer_Computer -= 1
-                    if Destroyer_Computer == 0:
+                    destroyer_computer -= 1
+                    if destroyer_computer == 0:
+                        print("\n Computer sunk the destroyer ship!")
                         ship_counter_computer -= 1
                     print(" ") 
                     player_turn = True   
                     break
-                
-                    
-
-
-
-
