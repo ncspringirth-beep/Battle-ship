@@ -1,4 +1,4 @@
-# Battle ship 1.2 stage: Nate S and Trusha
+# Battle ship 1.3 stage: Nate S and Trusha
 
 import random
 
@@ -11,10 +11,9 @@ if __name__ == "__main__":
     comp_numbers_list = []
     ship_counter = 0 
     row_num = [" ", "1","2", "3", "4", "5", "6", "7", "8", "9", "10"]
-    row_letter = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
+    row_letter = []
     user_guesses_list = []
-    let_list = []
-
+  
     while True:
         grid_size = int(input("How big do you want your grid (must be between 4 to 10.): "))
         if grid_size >= 4 or grid_size <= 10:
@@ -22,7 +21,11 @@ if __name__ == "__main__":
         else:
             print("Please enter a valid input.")
 
-    num_ships = 1
+    num_ships = 2
+
+    for letter in range(grid_size):
+        row_let = chr(ord('@')+(letter+1))
+        row_letter.append(row_let)
 
     # Player grid - users board in which computer guesses on
     numbers_list.append(row_num[0])
@@ -36,7 +39,7 @@ if __name__ == "__main__":
     # Player Grid - users board in which computer guesses on
     for rand_row in range(grid_size):    
         roworder = 0
-        row = [f"{row_letter[rand_row]}"]
+        row = [f"{chr(ord('@')+(rand_row+1))}"]
         for spot in range(grid_size):
             if spot == grid_size:
                 break
@@ -57,7 +60,7 @@ if __name__ == "__main__":
 
     # Comp Grid - enemy's board for user to guess on 
     for random_row in range(grid_size):
-        user_row = [f"{row_letter[random_row]}"]
+        user_row = [f"{chr(ord('@')+(random_row+1))}"]
         for spots in range(grid_size):
             if spots == grid_size:
                 break
@@ -78,7 +81,7 @@ if __name__ == "__main__":
 
     # Comp hidden board - board where o's or x's are printed
     for random_row1 in range(grid_size):
-        comp_row = [f"{row_letter[random_row1]}"]
+        comp_row = [f"{chr(ord('@')+(random_row1+1))}"]
         for spots1 in range(grid_size):
             if spots1 == grid_size:
                 break
@@ -87,14 +90,6 @@ if __name__ == "__main__":
                 comp_row.append(zero)
         comp_grid_hidden.append(comp_row)
         random_row1 += 1
-
-    let_row = 0
-    for let in row_letter:
-        if let_row > grid_size:
-            break
-        else: 
-            let_list.append(let)
-            let_row += 1
 
 # players ship computer guess 
     shipNumber = 1
@@ -192,7 +187,7 @@ if __name__ == "__main__":
                         break
 
 
-    print(f"There is {num_ships} ships on the board.")
+    print(f"There are {num_ships} ships on the board.")
     print("If you hit a ship an O will be on the board, otherwise it will be an X.")
     
     ship_counter_player = num_ships
@@ -217,7 +212,7 @@ if __name__ == "__main__":
             while True:
                 user_guess = input("Please enter your guess (A1): ")
                 if user_guess not in user_guesses_list:
-                    if user_guess[0] in let_list and user_guess[1] in user_numbers_list:
+                    if user_guess[0] in row_letter and user_guess[1] in user_numbers_list:
                             user_guesses_list.append(user_guess)
                             break
                 else:
@@ -226,7 +221,7 @@ if __name__ == "__main__":
             order_row = 0
             column = int(user_guess[1])
             
-            for specific_letter in let_list:
+            for specific_letter in row_letter:
                 order_row += 1
                 if user_guess[0] == specific_letter:
                     rowindex = order_row
@@ -236,7 +231,6 @@ if __name__ == "__main__":
                 print("\nMissed")
                 print(f"There is {ship_counter_player} ships on the board.")
                 print(" ")
-            
                 player_turn = False    
                 
             else:
@@ -252,25 +246,23 @@ if __name__ == "__main__":
                 if comp_grid[comp_guess_list][comp_guess_spot] == 0:
                     player_grid[comp_guess_list][comp_guess_spot] = "X"
                     letter_order = 0
-                    for letter in let_list:
+                    for letter in row_letter:
                         letter_order += 1
                         if comp_guess_list == letter_order:
                             comp_guess_list = letter
                     print(f"Computer choose coordinate {comp_guess_list}{comp_guess_spot} and missed.")
                     print(" ")
-
                     player_turn = True
                     break
                 elif comp_grid[comp_guess_list][comp_guess_spot] == 1:
                     player_grid[comp_guess_list][comp_guess_spot] = "O"
                     letter_order = 0
-                    for letter in let_list:
+                    for letter in row_letter:
                         letter_order += 1
                         if comp_guess_list == letter_order:
                             comp_guess_list = letter
                     print(f"Computer choose coordinate {comp_guess_list}{comp_guess_spot} and guessed correctly.")
                     ship_counter_computer -= 1
-                    print(" ")
-                    
+                    print(" ")    
                     break
                     
