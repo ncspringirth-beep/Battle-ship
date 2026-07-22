@@ -191,7 +191,7 @@ if __name__ == "__main__":
                         comp_grid[randomList][randomSpot - 1] = shipNumber
                         break
 
-    
+
     print(f"There is {num_ships} ships on the board.")
     print("If you hit a ship an O will be on the board, otherwise it will be an X.")
     
