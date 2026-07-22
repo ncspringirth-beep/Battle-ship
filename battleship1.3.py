@@ -234,6 +234,10 @@ if __name__ == "__main__":
         print("\nComputers Board")
         for row in comp_grid_hidden:
             print(*row)
+
+        print("\n Com board not hidden values")
+        for row in comp_grid:
+            print(*row)
         
         if ship_counter_player == 0:
             print("\nPlayer Wins! All computer ships hit! You won!")
@@ -268,17 +272,19 @@ if __name__ == "__main__":
                 player_turn = False
             elif comp_grid[rowindex][column] == 1:
                 comp_grid_hidden[rowindex][column] = "C"
-                print("\nCorrect. You hit a dingy")
+                print("\nCorrect. You sunk a dingy")
                 ship_counter_player -= 1
                 print(f"There are {ship_counter_player} ships on the board.")
                 print(" ")   
                 player_turn = False
             elif comp_grid[rowindex][column] == 2:
                 comp_grid_hidden[rowindex][column] = "C"
-                print("\nCorrect. You partially hit a destroyer")
                 destroyer_player -= 1
                 if destroyer_player == 0:
+                    print("\nCorrect. You sunk a destroyer ship!")
                     ship_counter_player -= 1
+                else:
+                    print("\nCorrect. You partially hit a destroyer")
                 print(f"There are {ship_counter_player} ships on the board.")
                 print(" ")
                 player_turn = False
@@ -288,7 +294,7 @@ if __name__ == "__main__":
             while True:
                 comp_guess_list = random.randint(1, grid_size)
                 comp_guess_spot = random.randint(1, grid_size)
-                if comp_grid[comp_guess_list][comp_guess_spot] == 0:
+                if player_grid[comp_guess_list][comp_guess_spot] == 0:
                     player_grid[comp_guess_list][comp_guess_spot] = "X"
                     letter_order = 0
                     for letter in row_letter:
@@ -299,9 +305,9 @@ if __name__ == "__main__":
                     print(" ")
                     player_turn = True
                     break
-                elif comp_grid[comp_guess_list][comp_guess_spot] == 1:
+                elif player_grid[comp_guess_list][comp_guess_spot] == 1:
                     player_grid[comp_guess_list][comp_guess_spot] = "C"
-                    print("\n Computer hit a dingy!")
+                    print("\n Computer sunk a dingy!")
                     letter_order = 0
                     for letter in row_letter:
                         letter_order += 1
@@ -311,9 +317,8 @@ if __name__ == "__main__":
                     ship_counter_computer -= 1
                     print(" ")    
                     break
-                elif comp_grid[comp_guess_list][comp_guess_spot] == 2:
+                elif player_grid[comp_guess_list][comp_guess_spot] == 2:
                     player_grid[comp_guess_list][comp_guess_spot] = "C"
-                    print("\nComputer partially hit a destroyer")
                     letter_order = 0
                     for letter in row_letter:
                         letter_order += 1
@@ -322,7 +327,7 @@ if __name__ == "__main__":
                     print(f"Computer choose coordinate {comp_guess_list}{comp_guess_spot} and guessed correctly.")
                     destroyer_computer -= 1
                     if destroyer_computer == 0:
-                        print("\n Computer sunk the destroyer ship!")
+                        print("Computer sunk a destroyer ship!")
                         ship_counter_computer -= 1
                     print(" ") 
                     player_turn = True   
