@@ -191,48 +191,48 @@ if __name__ == "__main__":
         elif ship_counter_computer == 0:
             print("\nComputer won! Computer hit all player ships!")
             break
-        elif player_turn:
-            print("\nPlayers turn: ")
+        
+        print("\nPlayers turn: ")
 
-            check = True
-            while check:
-                user_guess = input("Please enter your guess (A,1): ")
-                try:
-                    if user_guess[1] == ",":
-                        if user_guess not in user_guesses_list:
-                            let = user_guess.split(",")
-                            for letters in range(grid_size):
-                                check_let = chr(64 + (letters + 1))
-                                if check_let == let[0]:
-                                    break
-                            for num in range(grid_size):
-                                if int(let[1]) == num:
-                                    user_guesses_list.append(user_guess)
-                                    break
-                            break
-                    else:
-                        print("Please enter a valid guess.")
-                except:
+        check = True
+        while check:
+            user_guess = input("Please enter your guess (A,1): ")
+            try:
+                if user_guess[1] == ",":
+                    if user_guess not in user_guesses_list:
+                        let = user_guess.split(",")
+                        for letters in range(grid_size):
+                            check_let = chr(64 + (letters + 1))
+                            if check_let == let[0]:
+                                break
+                        for num in range(grid_size):
+                            if int(let[1]) == num:
+                                user_guesses_list.append(user_guess)
+                                break
+                        break
+                else:
                     print("Please enter a valid guess.")
-            order_row = 0
-            column = int(let[1])
-            
-            
-            for specific_letter in range(grid_size):
-                row_let = chr(64 + (specific_letter + 1))
-                order_row += 1
-                if let[0] == row_let:
-                    rowindex = order_row
-            winCheck, destroyer_player, ship_counter_player = win_check(comp_grid, comp_hidden_grid, rowindex, column, player_turn, ship_counter_player, destroyer_player)
-            if winCheck == True:
-                break
-            player_turn = False
+            except:
+                print("Please enter a valid guess.")
+        order_row = 0
+        column = int(let[1])
+        
+        
+        for specific_letter in range(grid_size):
+            row_let = chr(64 + (specific_letter + 1))
+            order_row += 1
+            if let[0] == row_let:
+                rowindex = order_row
+        winCheck, destroyer_player, ship_counter_player = win_check(comp_grid, comp_hidden_grid, rowindex, column, player_turn, ship_counter_player, destroyer_player)
+        if ship_counter_player == 0:
+            break
+        player_turn = False
 
-            if player_turn == False:
-                print("\nComputer's turn: ")
-                comp_guess_list = random.randint(1, grid_size)
-                comp_guess_spot = random.randint(1, grid_size)
-                winCheck, destroyer_computer, ship_counter_computer = win_check(player_grid, comp_hidden_grid, comp_guess_list, comp_guess_spot, player_turn, ship_counter_computer, destroyer_computer)
-                player_turn = True
-                if winCheck == True:
-                    break
+        if player_turn == False:
+            print("\nComputer's turn: ")
+            comp_guess_list = random.randint(1, grid_size)
+            comp_guess_spot = random.randint(1, grid_size)
+            winCheck, destroyer_computer, ship_counter_computer = win_check(player_grid, comp_hidden_grid, comp_guess_list, comp_guess_spot, player_turn, ship_counter_computer, destroyer_computer)
+            player_turn = True
+            if ship_counter_computer == 0:
+                break
