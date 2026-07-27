@@ -85,7 +85,7 @@ def Ship_placement(grid):
                     except:
                         continue
 
-def win_check(grid, shown_grid, row, column, player_turns, ship_counter, destroyer_spots):
+def win_check(grid, shown_grid, row, column, player_turns, ship_counter, destroyer):
     WinCheck = False
     if player_turns == True:
         print("player turn")
@@ -117,16 +117,18 @@ def win_check(grid, shown_grid, row, column, player_turns, ship_counter, destroy
         print(" ")   
         
     elif grid[row][column] == 2:
-        destroyer_spots -= 1
+        
         if player_turns == True:
+            destroyer -= 1
             shown_grid[row][column] = "C"
-            if destroyer_spots == 0:
+            if destroyer == 0:
                 print("\nCorrect. You sunk a destroyer ship!")
                 ship_counter -= 1
             else:
                 print("\nCorrect. You partially hit a destroyer")
         else:
-            if destroyer_spots == 0:
+            destroyer -= 1
+            if destroyer == 0:
                 print("Computer sunk the dingy ")
                 ship_counter -= 1
             else:
@@ -134,7 +136,7 @@ def win_check(grid, shown_grid, row, column, player_turns, ship_counter, destroy
 
         print(f"There are {ship_counter} ships on the board.")
         print(" ")
-    return WinCheck
+    return WinCheck, destroyer, ship_counter
 
 if __name__ == "__main__":
     ship_counter = 2
@@ -162,7 +164,9 @@ if __name__ == "__main__":
 
     Ship_placement(player_grid)
     Ship_placement(comp_grid)
-    print("hi")
+    for row in comp_grid:
+        print(*row)
+    
 
     print(f"There are {num_ships} ships on the board.")
     print("If you hit a ship an C will be on the board, otherwise it will be an X.")
@@ -219,7 +223,7 @@ if __name__ == "__main__":
                 order_row += 1
                 if let[0] == row_let:
                     rowindex = order_row
-            winCheck = win_check(comp_grid, comp_hidden_grid, rowindex, column, player_turn, ship_counter_player, destroyer_player)
+            winCheck, destroyer_player, ship_counter_player = win_check(comp_grid, comp_hidden_grid, rowindex, column, player_turn, ship_counter_player, destroyer_player)
             if winCheck == True:
                 break
             player_turn = False
@@ -228,7 +232,7 @@ if __name__ == "__main__":
                 print("\nComputer's turn: ")
                 comp_guess_list = random.randint(1, grid_size)
                 comp_guess_spot = random.randint(1, grid_size)
-                winCheck = win_check(player_grid, comp_hidden_grid, comp_guess_list, comp_guess_spot, player_turn, ship_counter_computer, destroyer_computer)
+                winCheck, destroyer_computer, ship_counter_computer = win_check(player_grid, comp_hidden_grid, comp_guess_list, comp_guess_spot, player_turn, ship_counter_computer, destroyer_computer)
                 player_turn = True
                 if winCheck == True:
                     break
