@@ -76,7 +76,7 @@ def Ship_placement(grid):
                 # 4 = left
                 if randomDirection == 4:
                     try:
-                        if grid[randomList][randomSpot] != " ":
+                        if grid[randomList][randomSpot - 1] != " ":
                             continue
                         else:
                             grid[randomList][randomSpot] = shipNumber
@@ -84,6 +84,57 @@ def Ship_placement(grid):
                             break
                     except:
                         continue
+
+def win_check(grid, shown_grid, row, column, player_turns, ship_counter, destroyer_spots):
+    WinCheck = False
+    if player_turns == True:
+        print("player turn")
+    elif player_turns == False:
+        print("computer turn")
+
+    if ship_counter == 0:
+        WinCheck = True
+        if player_turns == True:
+        
+            print("player won")
+        elif player_turns == False:
+            print("computer won")
+    elif grid[row][column] == " ":
+        if player_turns == True:
+            shown_grid[row][column] = "X"
+        print("\nMissed")
+        print(f"There are {ship_counter_player} ships on the board.")
+        print(" ")
+        
+    elif grid[row][column] == 1:
+        if player_turns == True:
+            shown_grid[row][column] = "C"
+            print("\nCorrect. You sunk a dingy")
+        else:
+            print("Computer sunk a dingy")
+        ship_counter -= 1
+        print(f"There are {ship_counter} ships on the board.")
+        print(" ")   
+        
+    elif grid[row][column] == 2:
+        destroyer_spots -= 1
+        if player_turns == True:
+            shown_grid[row][column] = "C"
+            if destroyer_spots == 0:
+                print("\nCorrect. You sunk a destroyer ship!")
+                ship_counter -= 1
+            else:
+                print("\nCorrect. You partially hit a destroyer")
+        else:
+            if destroyer_spots == 0:
+                print("Computer sunk the dingy ")
+                ship_counter -= 1
+            else:
+                print("Computer partially hit a dingy")
+
+        print(f"There are {ship_counter} ships on the board.")
+        print(" ")
+    return WinCheck
 
 if __name__ == "__main__":
     ship_counter = 2
@@ -162,87 +213,22 @@ if __name__ == "__main__":
             order_row = 0
             column = int(let[1])
             
+            
             for specific_letter in range(grid_size):
                 row_let = chr(64 + (specific_letter + 1))
                 order_row += 1
                 if let[0] == row_let:
                     rowindex = order_row
+            winCheck = win_check(comp_grid, comp_hidden_grid, rowindex, column, player_turn, ship_counter_player, destroyer_player)
+            if winCheck == True:
+                break
+            player_turn = False
 
-            if comp_grid[rowindex][column] == " ":
-                comp_hidden_grid[rowindex][column] = "X"
-                print("\nMissed")
-                print(f"There are {ship_counter_player} ships on the board.")
-                print(" ")
-                player_turn = False
-            elif comp_grid[rowindex][column] == 1:
-                comp_hidden_grid[rowindex][column] = "C"
-                print("\nCorrect. You sunk a dingy")
-                ship_counter_player -= 1
-                print(f"There are {ship_counter_player} ships on the board.")
-                print(" ")   
-                player_turn = False
-            elif comp_grid[rowindex][column] == 2:
-                comp_hidden_grid[rowindex][column] = "C"
-                destroyer_player -= 1
-                if destroyer_player == 0:
-                    print("\nCorrect. You sunk a destroyer ship!")
-                    ship_counter_player -= 1
-                else:
-                    print("\nCorrect. You partially hit a destroyer")
-                print(f"There are {ship_counter_player} ships on the board.")
-                print(" ")
-                player_turn = False
-
-        elif player_turn == False:
-            print("\nComputer's turn: ")
-            while True:
+            if player_turn == False:
+                print("\nComputer's turn: ")
                 comp_guess_list = random.randint(1, grid_size)
                 comp_guess_spot = random.randint(1, grid_size)
-                if player_grid[comp_guess_list][comp_guess_spot] == " ":
-                    player_grid[comp_guess_list][comp_guess_spot] = "X"
-                    letter_order = 0
-                    for letter in range(grid_size):
-                        row_lets = chr(64 + (letter + 1))
-                        letter_order += 1
-                        if comp_guess_list == letter_order:
-                            comp_guess_list = row_lets
-                            break
-                        
-                    print(f"Computer choose coordinate {comp_guess_list}{comp_guess_spot} and missed.")
-                    print(" ")
-                    player_turn = True
-                    break
-                elif player_grid[comp_guess_list][comp_guess_spot] == 1:
-                    player_grid[comp_guess_list][comp_guess_spot] = "C"
-                    print("\n Computer sunk a dingy!")
-                    letter_order = 0
-                    for letter in range(grid_size):
-                        row_lets = chr(64 + (letter + 1))
-                        letter_order += 1
-                        if comp_guess_list == letter_order:
-                            comp_guess_list = row_lets 
-                            break
-
-                    print(f"Computer choose coordinate {comp_guess_list}{comp_guess_spot} and guessed correctly.")
-                    ship_counter_computer -= 1
-                    print(" ") 
-                    player_turn = True
-                    break
-                elif player_grid[comp_guess_list][comp_guess_spot] == 2:
-                    player_grid[comp_guess_list][comp_guess_spot] = "C"
-                    letter_order = 0
-                    for letter in range(grid_size):
-                        row_lets = chr(64 + (letter + 1))
-                        letter_order += 1
-                        if comp_guess_list == letter_order:
-                            comp_guess_list = row_lets
-                            break
-
-                    print(f"Computer choose coordinate {comp_guess_list}{comp_guess_spot} and guessed correctly.")
-                    destroyer_computer -= 1
-                    if destroyer_computer == 0:
-                        print("Computer sunk a destroyer ship!")
-                        ship_counter_computer -= 1
-                    print(" ") 
-                    player_turn = True   
+                winCheck = win_check(player_grid, comp_hidden_grid, comp_guess_list, comp_guess_spot, player_turn, ship_counter_computer, destroyer_computer)
+                player_turn = True
+                if winCheck == True:
                     break
