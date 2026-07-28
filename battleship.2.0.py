@@ -132,7 +132,7 @@ def coordinate(user_guesses_list):
     check = True
     while check:
         user_guess = input("Please enter your guess (A,1): ")
-        
+
         if len(user_guess) < 3 or int(user_guess[2]) == 0:
             print("Please enter a valid guess")
             continue
@@ -224,14 +224,16 @@ if __name__ == "__main__":
         print("\nPlayers turn: ")
 
         let = coordinate(user_guesses_list)
+        
         order_row = 0
         column = int(let[1])
+        print(column)
         
         for specific_letter in range(grid_size):
             row_let = chr(64 + (specific_letter + 1))
             order_row += 1
             if let[0] == row_let:
-                rowindex = order_row
+                rowindex = order_row + grid_size
 
         winCheck, destroyer_player, ship_counter_player = win_check(comp_grid, comp_hidden_grid, rowindex, column, player_turn, ship_counter_player, destroyer_player)
         if ship_counter_player == 0:
@@ -279,7 +281,6 @@ if __name__ == "__main__":
                         break
                 if player_grid[comp_guess_list][comp_guess_spot] ==  " " or player_grid[comp_guess_list][comp_guess_spot] == 1 or player_grid[comp_guess_list][comp_guess_spot] == 2:
                     break
-            print(f"Computer choose coordinate {comp_guess_letter}{comp_guess_spot}.")
             winCheck, destroyer_computer, ship_counter_computer = win_check(player_grid, player_grid, comp_guess_list, comp_guess_spot, player_turn, ship_counter_computer, destroyer_computer)
 
             if ship_counter_computer == 0:
