@@ -5,10 +5,10 @@ import random
 def create_board():
     board = []
     num_list = []
-    num_list.append(" ")
+    board.append(" ")
     for num in range(grid_size):
-        num_list.append(num+1)
-    board.append(num_list)
+        board.append(num+1)
+    
     for rand_row in range(grid_size):    
         row = [f"{chr(64+(rand_row+1))}"]
         for spot in range(grid_size):
@@ -25,7 +25,7 @@ def Ship_placement(grid):
     shipNumber = 1
     while True:
         if shipNumber == 1:
-            randomList = random.randint(1, grid_size)
+            randomList = random.randint(grid_size + 1, grid_size + grid_size)
             randomSpot = random.randint(1, grid_size)
             if grid[randomList][randomSpot] != " ":
                 continue
@@ -34,7 +34,7 @@ def Ship_placement(grid):
                 shipNumber += 1
                 continue
         elif shipNumber == 2:
-            randomList = random.randint(1, grid_size)
+            randomList = random.randint(grid_size + 1, grid_size + grid_size)
             randomSpot = random.randint(1, grid_size)
             if grid[randomList][randomSpot] != " ":
                 continue
@@ -87,34 +87,24 @@ def Ship_placement(grid):
 
 def win_check(grid, shown_grid, row, column, player_turns, ship_counter, destroyer):
     WinCheck = False
-    if player_turns == True:
-        print("player turn")
-    elif player_turns == False:
-        print("computer turn")
-
     if ship_counter == 0:
         WinCheck = True
-        if player_turns == True:
-        
-            print("player won")
-        elif player_turns == False:
-            print("computer won")
+
     elif grid[row][column] == " ":
-        if player_turns == True:
-            shown_grid[row][column] = "X"
-        print("\nMissed")
+        shown_grid[row][column] = "X"
+
+        print("Missed")
         print(f"There are {ship_counter_player} ships on the board.")
-        print(" ")
         
     elif grid[row][column] == 1:
         if player_turns == True:
             shown_grid[row][column] = "C"
             print("\nCorrect. You sunk a dingy")
         else:
+            shown_grid[row][column] = "C"
             print("Computer sunk a dingy")
         ship_counter -= 1
         print(f"There are {ship_counter} ships on the board.")
-        print(" ")   
         
     elif grid[row][column] == 2:
         
@@ -128,6 +118,7 @@ def win_check(grid, shown_grid, row, column, player_turns, ship_counter, destroy
                 print("\nCorrect. You partially hit a destroyer")
         else:
             destroyer -= 1
+            shown_grid[row][column] = "C"
             if destroyer == 0:
                 print("Computer sunk the dingy ")
                 ship_counter -= 1
@@ -135,19 +126,63 @@ def win_check(grid, shown_grid, row, column, player_turns, ship_counter, destroy
                 print("Computer partially hit a dingy")
 
         print(f"There are {ship_counter} ships on the board.")
-        print(" ")
+
     return WinCheck, destroyer, ship_counter
 
+def coordinate(user_guesses_list):
+    check = True
+    while check:
+        user_guess = input("Please enter your guess (A,1): ")
+        if len(user_guess) < 3 or int(user_guess[2]) == 0:
+            print("Please enter a valid guess")
+            continue
+        try:
+            if user_guess[1] == ",":
+                if user_guess not in user_guesses_list:
+                    let = user_guess.split(",")
+                    for letters in range(grid_size):
+                        check_let = chr(64 + (letters + 1))
+                        if check_let == let[0]:
+                            check = False
+                            break
+                        else:
+                            check = True
+                    if check == True:
+                        print("Please enter a valid guess")
+                        continue
+                    else:
+                        for num in range(grid_size+1):
+                            if int(let[1]) == num:
+                                user_guesses_list.append(user_guess)
+                                check = False
+                                break
+                            else:
+                                check = True 
+                else:
+                    print("Please enter a valid guess.")
+            else:
+                print("Please enter a valid guess.")
+        except:
+            print("Please enter a valid guess.")
+    return let
+
 if __name__ == "__main__":
-    ship_counter = 2
     user_guesses_list = []
     num_ships = 2
+    ship_counter_player = num_ships
+    destroyer_player = 2
+    ship_counter_computer = num_ships
+    destroyer_computer = 2
+    player_turn = True
 
     while True:
-        grid_size = int(input("How big do you want your grid (must be between 4 to 10.): "))
-        if grid_size >= 4 or grid_size <= 10:
-            break
-        else:
+        try:
+            grid_size = int(input("How big do you want your grid (must be between 4 to 10.): "))
+            if grid_size >= 4 or grid_size <= 10:
+                break
+            else:
+                print("Please enter a valid input.")
+        except:
             print("Please enter a valid input.")
 
     # create boards
@@ -155,84 +190,78 @@ if __name__ == "__main__":
     comp_grid = create_board()
     comp_hidden_grid = create_board()
 
-    print("Player Board:")
-    for row in player_grid:
-        print(*row)
-    print("\nComputers Board")
-    for row in comp_hidden_grid:
-        print(*row)
-
     Ship_placement(player_grid)
+    print(player_grid)
     Ship_placement(comp_grid)
-    for row in comp_grid:
-        print(*row)
-    
-
+    print(comp_grid)
     print(f"There are {num_ships} ships on the board.")
     print("If you hit a ship an C will be on the board, otherwise it will be an X.")
     
-    ship_counter_player = num_ships
-    destroyer_player = 2
-    ship_counter_computer = num_ships
-    destroyer_computer = 2
-    player_turn = True
-    
     while True:
-        print("Player Board:")
+        print("\nPlayer Board:")
         for row in player_grid:
             print(*row)
         print("\nComputers Board")
         for row in comp_hidden_grid:
             print(*row)
         
-        if ship_counter_player == 0:
-            print("\nPlayer Wins! All computer ships hit! You won!")
-            break
-        elif ship_counter_computer == 0:
-            print("\nComputer won! Computer hit all player ships!")
-            break
-        
         print("\nPlayers turn: ")
 
-        check = True
-        while check:
-            user_guess = input("Please enter your guess (A,1): ")
-            try:
-                if user_guess[1] == ",":
-                    if user_guess not in user_guesses_list:
-                        let = user_guess.split(",")
-                        for letters in range(grid_size):
-                            check_let = chr(64 + (letters + 1))
-                            if check_let == let[0]:
-                                break
-                        for num in range(grid_size):
-                            if int(let[1]) == num:
-                                user_guesses_list.append(user_guess)
-                                break
-                        break
-                else:
-                    print("Please enter a valid guess.")
-            except:
-                print("Please enter a valid guess.")
+        let = coordinate(user_guesses_list)
         order_row = 0
         column = int(let[1])
-        
         
         for specific_letter in range(grid_size):
             row_let = chr(64 + (specific_letter + 1))
             order_row += 1
             if let[0] == row_let:
                 rowindex = order_row
+
         winCheck, destroyer_player, ship_counter_player = win_check(comp_grid, comp_hidden_grid, rowindex, column, player_turn, ship_counter_player, destroyer_player)
         if ship_counter_player == 0:
+
+            print("\nPlayer Board:")
+            for row in player_grid:
+                print(*row)
+            print("\nComputers Board")
+            for row in comp_hidden_grid:
+                print(*row)
+
+            print("Player Wins! All computer ships hit! You won!")
+            print(" ")
             break
-        player_turn = False
+        else:
+            player_turn = False
 
         if player_turn == False:
             print("\nComputer's turn: ")
-            comp_guess_list = random.randint(1, grid_size)
-            comp_guess_spot = random.randint(1, grid_size)
-            winCheck, destroyer_computer, ship_counter_computer = win_check(player_grid, comp_hidden_grid, comp_guess_list, comp_guess_spot, player_turn, ship_counter_computer, destroyer_computer)
-            player_turn = True
+            while True:
+                comp_guess_list = random.randint(1 + grid_size, grid_size + grid_size)
+                comp_guess_spot = random.randint(1, grid_size)
+                letter_order = 0
+                for letter in range(grid_size):
+                    row_lets = chr(64 + (letter + 1))
+                    letter_order += 1
+                    if comp_guess_list == letter_order:
+                        comp_guess_letter = row_lets
+                        break
+                if player_grid[comp_guess_list][comp_guess_spot] ==  " " or player_grid[comp_guess_list][comp_guess_spot] == 1 or player_grid[comp_guess_list][comp_guess_spot] == 2:
+                    break
+            print(f"Computer choose coordinate {comp_guess_letter}{comp_guess_spot}.")
+            winCheck, destroyer_computer, ship_counter_computer = win_check(player_grid, player_grid, comp_guess_list, comp_guess_spot, player_turn, ship_counter_computer, destroyer_computer)
+
             if ship_counter_computer == 0:
+
+                print("\nPlayer Board:")
+                for row in player_grid:
+                    print(*row)
+                print("\nComputers Board")
+                for row in comp_hidden_grid:
+                    print(*row)
+
+                print("Computer won! Computer hit all player ships!")
+                print(" ")
+
                 break
+            else:
+                player_turn = True
