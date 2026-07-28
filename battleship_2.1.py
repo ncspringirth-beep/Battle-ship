@@ -133,31 +133,33 @@ def coordinate():
     while check:
         user_guess = input("Please enter your guess (A,1): ")
         let = user_guess.split(",")
-        if len(user_guess) < 3 or int(user_guess[2]) == 0:
+        if len(user_guess) < 3 or int(user_guess[2]) == 0 or user_guess[1] != ",":
             print("Please enter a valid guess")
             continue
         try:
-            if user_guess[1] == ",":
-                if comp_grid[let[0]][let[1]] == " " or comp_grid[let[0]][let[1]] == 1 or comp_grid[let[0]][let[1]] == 2:
-                    for letters in range(grid_size):
-                        check_let = chr(64 + (letters + 1))
-                        if check_let == let[0]:
+            
+            check_let = ord(let[0])
+            check_let -= 64
+            check_let += grid_size
+            if comp_hidden_grid[check_let][int(let[1])] == " " or comp_hidden_grid[check_let][int(let[1])] == 1 or comp_hidden_grid[check_let][int(let[1])] == 2:
+                for letters in range(grid_size):
+                    check_let = chr(64 + (letters + 1))
+                    if check_let == let[0]:
+                        check = False
+                        break
+                    else:
+                        check = True
+                if check == True:
+                    print("Please enter a valid guess")
+                    continue
+                else:
+                    for num in range(grid_size+1):
+                        if int(let[1]) == num:
                             check = False
                             break
                         else:
-                            check = True
-                    if check == True:
-                        print("Please enter a valid guess")
-                        continue
-                    else:
-                        for num in range(grid_size+1):
-                            if int(let[1]) == num:
-                                check = False
-                                break
-                            else:
-                                check = True 
-                else:
-                    print("Please enter a valid guess.")
+                            check = True 
+                    
             else:
                 print("Please enter a valid guess.")
         except:
