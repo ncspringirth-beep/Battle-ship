@@ -4,7 +4,6 @@ import random
 
 def create_board():
     board = []
-    num_list = []
     board.append(" ")
     for num in range(grid_size):
         board.append(num+1)
@@ -133,6 +132,7 @@ def coordinate(user_guesses_list):
     check = True
     while check:
         user_guess = input("Please enter your guess (A,1): ")
+        
         if len(user_guess) < 3 or int(user_guess[2]) == 0:
             print("Please enter a valid guess")
             continue
@@ -196,14 +196,30 @@ if __name__ == "__main__":
     print(comp_grid)
     print(f"There are {num_ships} ships on the board.")
     print("If you hit a ship an C will be on the board, otherwise it will be an X.")
-    
     while True:
         print("\nPlayer Board:")
+        i = 0
+        first_row = ""
         for row in player_grid:
-            print(*row)
+            number = str(row) + " "
+            first_row += number
+            if i == grid_size:
+                print(first_row)
+            if i > grid_size:
+                print(*row)
+            i += 1
         print("\nComputers Board")
+        i = 0
+        first_row = ""
         for row in comp_hidden_grid:
-            print(*row)
+            number = str(row) + " "
+            first_row += number
+            if i == grid_size:
+                print(first_row)
+            if i > grid_size:
+                print(*row)
+            i += 1
+
         
         print("\nPlayers turn: ")
 
@@ -221,11 +237,27 @@ if __name__ == "__main__":
         if ship_counter_player == 0:
 
             print("\nPlayer Board:")
+            i = 0
+            first_row = ""
             for row in player_grid:
-                print(*row)
+                number = str(row) + " "
+                first_row += number
+                if i == grid_size:
+                    print(first_row)
+                if i > grid_size:
+                    print(*row)
+                i += 1
             print("\nComputers Board")
+            i = 0
+            first_row = ""
             for row in comp_hidden_grid:
-                print(*row)
+                number = str(row) + " "
+                first_row += number
+                if i == grid_size:
+                    print(first_row)
+                if i > grid_size:
+                    print(*row)
+                i += 1
 
             print("Player Wins! All computer ships hit! You won!")
             print(" ")
