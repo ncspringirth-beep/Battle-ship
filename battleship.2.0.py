@@ -2,7 +2,7 @@
 
 import random
 
-def create_board():
+def create_board(grid_size):
     board = []
     board.append(" ")
     for num in range(grid_size):
@@ -20,7 +20,7 @@ def create_board():
         rand_row += 1
     return board
 
-def Ship_placement(grid):
+def Ship_placement(grid, grid_size):
     shipNumber = 1
     while True:
         if shipNumber == 1:
@@ -128,7 +128,7 @@ def win_check(grid, shown_grid, row, column, player_turns, ship_counter, destroy
 
     return WinCheck, destroyer, ship_counter
 
-def coordinate(user_guesses_list):
+def coordinate(user_guesses_list, grid_size, player_grid):
     check = True
     while check:
         user_guess = input("Please enter your guess (A,1): ")
@@ -180,7 +180,6 @@ def coordinate(user_guesses_list):
                 break
     return let, comp_guess_letter, comp_guess_list, comp_guess_spot
 
-
 if __name__ == "__main__":
     user_guesses_list = []
     num_ships = 2
@@ -201,12 +200,12 @@ if __name__ == "__main__":
             print("Please enter a valid input.")
 
     # create boards
-    player_grid = create_board()
-    comp_grid = create_board()
-    comp_hidden_grid = create_board()
+    player_grid = create_board(grid_size)
+    comp_grid = create_board(grid_size)
+    comp_hidden_grid = create_board(grid_size)
 
-    Ship_placement(player_grid)
-    Ship_placement(comp_grid)
+    Ship_placement(player_grid, grid_size)
+    Ship_placement(comp_grid, grid_size)
 
     print(f"There are {num_ships} ships on the board.")
     print("If you hit a ship an C will be on the board, otherwise it will be an X.")
@@ -237,7 +236,7 @@ if __name__ == "__main__":
             i += 1
 
         print("\nPlayers turn: ")
-        let, comp_guess_letter, comp_guess_list, comp_guess_spot  = coordinate(user_guesses_list)
+        let, comp_guess_letter, comp_guess_list, comp_guess_spot  = coordinate(user_guesses_list, grid_size, player_grid)
         order_row = 0
         column = int(let[1])
         
