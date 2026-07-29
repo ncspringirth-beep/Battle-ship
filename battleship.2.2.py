@@ -22,16 +22,17 @@ def create_board(grid_size):
 
 def dictionary():
     fleet = {
-        "carrier": [],
-        "battleship": [],
+        "carrier": [4],
+        "battleship": [3],
         "cruiser": [],
-        "submarine": [],
-        "destroyer": []
+        "submarine": [2],
+        "destroyer": [1]
     }
     return fleet
 
 def Ship_placement(grid, grid_size, fleet):
     shipNumber = 1
+    ship3Amount = 0
     while True:
         if shipNumber == 5:
             break
@@ -54,10 +55,32 @@ def Ship_placement(grid, grid_size, fleet):
                         CoordCheck = False
                         break
                 if CoordCheck == True:
+                    coordList = [randomList, randomSpot]
                     grid[randomList][randomSpot] = 1
                     for SpotAdd in range(shipNumber):
                         grid[randomList - (SpotAdd + 1)][randomSpot] = 1
-                    shipNumber += 1
+                    if shipNumber == 2 and ship3Amount == 0:
+                        ship3Amount = 1
+                        fleet["cruiser"].append(coordList)
+                        for dicSpotAdd in range(2):
+                            coordList = [randomList - (dicSpotAdd + 1), randomSpot]
+                            fleet["cruiser"].append(coordList)
+                    else:
+                        # shipNumber += 1
+                        for shipKey in fleet:
+                            try:
+                                if fleet[shipKey][0] == shipNumber:
+                                    del fleet[shipKey][0]
+                                    fleet[shipKey].append(coordList)
+                                    for dicSpotAdd in range(shipNumber):
+                                        coordList = [randomList - (dicSpotAdd + 1), randomSpot]
+                                        fleet[shipKey].append(coordList)
+                            except:
+                                continue
+                        shipNumber += 1
+                                        
+                        
+                    
                 else:
                     continue
             # 2 = up
@@ -73,10 +96,29 @@ def Ship_placement(grid, grid_size, fleet):
                         CoordCheck = False
                         break
                 if CoordCheck == True:
+                    coordList = [randomList, randomSpot]
                     grid[randomList][randomSpot] = 1
                     for SpotAdd in range(shipNumber):
                         grid[randomList + (SpotAdd + 1)][randomSpot] = 1
-                    shipNumber += 1
+                    if shipNumber == 2 and ship3Amount == 0:
+                        ship3Amount = 1
+                        fleet["cruiser"].append(coordList)
+                        for dicSpotAdd in range(2):
+                            coordList = [randomList + (dicSpotAdd + 1), randomSpot]
+                            fleet["cruiser"].append(coordList)
+                    else:
+                        # shipNumber += 1
+                        for shipKey in fleet:
+                            try:
+                                if fleet[shipKey][0] == shipNumber:
+                                    del fleet[shipKey][0]
+                                    fleet[shipKey].append(coordList)
+                                    for dicSpotAdd in range(shipNumber):
+                                        coordList = [randomList + (dicSpotAdd + 1), randomSpot]
+                                        fleet[shipKey].append(coordList)
+                            except:
+                                continue
+                        shipNumber += 1
                 else:
                     continue
                 
@@ -84,7 +126,7 @@ def Ship_placement(grid, grid_size, fleet):
             if randomDirection == 3:
                 for SpotAddCheck in range(shipNumber):
                     try:
-                        if grid[randomList][randomSpot + (SpotAdd + 1)] != " ":
+                        if grid[randomList][randomSpot + (SpotAddCheck + 1)] != " ":
                             CoordCheck = False
                             break
                         else:
@@ -93,17 +135,36 @@ def Ship_placement(grid, grid_size, fleet):
                         CoordCheck = False
                         break
                 if CoordCheck == True:
+                    coordList = [randomList, randomSpot]
                     grid[randomList][randomSpot] = 1
                     for SpotAdd in range(shipNumber):
                         grid[randomList][randomSpot + (SpotAdd + 1)] = 1
-                    shipNumber += 1
+                    if shipNumber == 2 and ship3Amount == 0:
+                        ship3Amount = 1
+                        fleet["cruiser"].append(coordList)
+                        for dicSpotAdd in range(2):
+                            coordList = [randomList, randomSpot + (dicSpotAdd + 1)]
+                            fleet["cruiser"].append(coordList)
+                    else:
+                        # shipNumber += 1
+                        for shipKey in fleet:
+                            try:
+                                if fleet[shipKey][0] == shipNumber:
+                                    del fleet[shipKey][0]
+                                    fleet[shipKey].append(coordList)
+                                    for dicSpotAdd in range(shipNumber):
+                                        coordList = [randomList, randomSpot + (dicSpotAdd + 1)]
+                                        fleet[shipKey].append(coordList)
+                            except:
+                                continue
+                        shipNumber += 1
                 else:
                     continue
             # 4 = left
             if randomDirection == 4:
                 for SpotAddCheck in range(shipNumber):
                     try:
-                        if grid[randomList][randomSpot + (SpotAdd + 1)] != " ":
+                        if grid[randomList][randomSpot - (SpotAdd + 1)] != " ":
                             CoordCheck = False
                             break
                         else:
@@ -112,10 +173,29 @@ def Ship_placement(grid, grid_size, fleet):
                         CoordCheck = False
                         break
                 if CoordCheck == True:
+                    coordList = [randomList, randomSpot]
                     grid[randomList][randomSpot] = 1
                     for SpotAdd in range(shipNumber):
-                        grid[randomList][randomSpot + (SpotAdd + 1)] = 1
-                    shipNumber += 1
+                        grid[randomList][randomSpot - (dicSpotAdd + 1)] = 1
+                    if shipNumber == 2 and ship3Amount == 0:
+                        ship3Amount = 1
+                        fleet["cruiser"].append(coordList)
+                        for dicSpotAdd in range(2):
+                            coordList = [randomList, randomSpot - (dicSpotAdd + 1)]
+                            fleet["cruiser"].append(coordList)
+                    else:
+                        # shipNumber += 1
+                        for shipKey in fleet:
+                            try:
+                                if fleet[shipKey][0] == shipNumber:
+                                    del fleet[shipKey][0]
+                                    fleet[shipKey].append(coordList)
+                                    for dicSpotAdd in range(shipNumber):
+                                        coordList = [randomList, randomSpot - (dicSpotAdd + 1)]
+                                        fleet[shipKey].append(coordList)
+                            except:
+                                continue
+                        shipNumber += 1
                 else:
                     continue
 
@@ -221,6 +301,18 @@ if __name__ == "__main__":
     computer_fleet = dictionary()
     
     Ship_placement(player_grid, grid_size, player_fleet)
+    i = 0
+    first_row = ""
+    for row in player_grid:
+        number = str(row) + " "
+        first_row += number
+        if i == grid_size:
+            print(first_row)
+        if i > grid_size:
+            print(*row)
+        i += 1
+    for playerKey in player_fleet:
+        print(player_fleet[playerKey])
     Ship_placement(comp_grid, grid_size, computer_fleet)
 
     print(f"There are {num_ships} ships on the board.")
