@@ -20,16 +20,23 @@ def create_board(grid_size):
         rand_row += 1
     return board
 
-def Ship_placement(grid, grid_size):
+def dictionary():
+    fleet = {
+        "carrier": [],
+        "battleship": [],
+        "cruiser": [],
+        "submarine": [],
+        "destroyer": []
+    }
+    return fleet
+
+def Ship_placement(grid, grid_size, fleet):
     shipNumber = 1
     while True:
         if shipNumber == 5:
             break
-        
         randomList = random.randint(grid_size + 1, grid_size + grid_size)
         randomSpot = random.randint(1, grid_size)
-        # shipCoordList = [randomList, randomSpot]
-        # dic["ship"].append(shipCoordList)
         if grid[randomList][randomSpot] != " ":
             continue
         else:
@@ -112,7 +119,7 @@ def Ship_placement(grid, grid_size):
                 else:
                     continue
 
-def win_check(grid, shown_grid, row, column, player_turns, ship_counter, destroyer):
+def win_check(grid, shown_grid, row, column, player_turns, ship_counter, destroyer, fleet):
     WinCheck = False
     if ship_counter == 0:
         WinCheck = True
@@ -123,17 +130,7 @@ def win_check(grid, shown_grid, row, column, player_turns, ship_counter, destroy
         print("Missed")
         print(f"There are {ship_counter} ships on the board.")
         
-    elif grid[row][column] == 1:
-        if player_turns == True:
-            shown_grid[row][column] = "C"
-            print("\nCorrect. You sunk a dingy")
-        else:
-            shown_grid[row][column] = "C"
-            print("Computer sunk a dingy")
-        ship_counter -= 1
-        print(f"There are {ship_counter} ships on the board.")
-        
-    elif grid[row][column] == 2:
+    elif fleet["destroyer"] == [row][column] == 2:
         
         if player_turns == True:
             destroyer -= 1
@@ -207,7 +204,7 @@ def coordinate(grid_size, player_grid, comp_hidden_grid):
     return let, comp_guess_letter, comp_guess_list, comp_guess_spot
 
 if __name__ == "__main__":
-    num_ships = 2
+    num_ships = 5
     ship_counter_player = num_ships
     destroyer_player = 2
     ship_counter_computer = num_ships
@@ -220,18 +217,11 @@ if __name__ == "__main__":
     comp_grid = create_board(grid_size)
     comp_hidden_grid = create_board(grid_size)
 
-    Ship_placement(player_grid, grid_size)
-    i = 0
-    first_row = ""
-    for row in player_grid:
-        number = str(row) + " "
-        first_row += number
-        if i == grid_size:
-            print(first_row)
-        if i > grid_size:
-            print(*row)
-        i += 1
-    Ship_placement(comp_grid, grid_size)
+    player_fleet = dictionary()
+    computer_fleet = dictionary()
+    
+    Ship_placement(player_grid, grid_size, player_fleet)
+    Ship_placement(comp_grid, grid_size, computer_fleet)
 
     print(f"There are {num_ships} ships on the board.")
     print("If you hit a ship an C will be on the board, otherwise it will be an X.")
@@ -271,7 +261,7 @@ if __name__ == "__main__":
             if let[0] == row_let:
                 rowindex = order_row + grid_size
 
-        winCheck, destroyer_player, ship_counter_player = win_check(comp_grid, comp_hidden_grid, rowindex, column, player_turn, ship_counter_player, destroyer_player)
+        winCheck, destroyer_player, ship_counter_player = win_check(comp_grid, comp_hidden_grid, rowindex, column, player_turn, ship_counter_player, destroyer_player, player_fleet)
 
         if ship_counter_player == 0:
             print("\nPlayer Board:")
@@ -306,7 +296,7 @@ if __name__ == "__main__":
         if player_turn == False:
             print("\nComputer's turn: ")
             print(f"Computer choose coordinate {comp_guess_letter}{comp_guess_spot}")
-            winCheck, destroyer_computer, ship_counter_computer = win_check(player_grid, player_grid, comp_guess_list, comp_guess_spot, player_turn, ship_counter_computer, destroyer_computer)
+            winCheck, destroyer_computer, ship_counter_computer = win_check(player_grid, player_grid, comp_guess_list, comp_guess_spot, player_turn, ship_counter_computer, destroyer_computer, computer_fleet)
 
             if ship_counter_computer == 0:
                 print("\nPlayer Board:")
