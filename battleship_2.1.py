@@ -93,7 +93,7 @@ def win_check(grid, shown_grid, row, column, player_turns, ship_counter, destroy
         shown_grid[row][column] = "X"
 
         print("Missed")
-        print(f"There are {ship_counter_player} ships on the board.")
+        print(f"There are {ship_counter} ships on the board.")
         
     elif grid[row][column] == 1:
         if player_turns == True:
