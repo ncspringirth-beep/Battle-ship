@@ -22,11 +22,11 @@ def create_board(grid_size):
 
 def dictionary():
     fleet = {
-        "carrier": [4,5],
-        "battleship": [3,4],
+        "carrier": [4],
+        "battleship": [3],
         "cruiser": [],
-        "submarine": [2,3],
-        "destroyer": [1,2]
+        "submarine": [2],
+        "destroyer": [1]
     }
     return fleet
 
@@ -65,7 +65,6 @@ def Ship_placement(grid, grid_size, fleet):
                         for dicSpotAdd in range(2):
                             coordList = [randomList - (dicSpotAdd + 1), randomSpot]
                             fleet["cruiser"].append(coordList)
-                        fleet["cruiser"].append(0)
                     else:
                         for shipKey in fleet:
                             try:
@@ -104,7 +103,6 @@ def Ship_placement(grid, grid_size, fleet):
                         for dicSpotAdd in range(2):
                             coordList = [randomList + (dicSpotAdd + 1), randomSpot]
                             fleet["cruiser"].append(coordList)
-                        fleet["cruiser"].append(0)
                     else:
                         for shipKey in fleet:
                             try:
@@ -143,7 +141,6 @@ def Ship_placement(grid, grid_size, fleet):
                         for dicSpotAdd in range(2):
                             coordList = [randomList, randomSpot + (dicSpotAdd + 1)]
                             fleet["cruiser"].append(coordList)
-                        fleet["cruiser"].append(0)
                     else:
                         for shipKey in fleet:
                             try:
@@ -181,7 +178,6 @@ def Ship_placement(grid, grid_size, fleet):
                         for dicSpotAdd in range(2):
                             coordList = [randomList, randomSpot - (dicSpotAdd + 1)]
                             fleet["cruiser"].append(coordList)
-                        fleet["cruiser"].append(0)
                     else:
                         for shipKey in fleet:
                             try:
@@ -202,10 +198,10 @@ def win_check(shown_grid, row, column, player_turns, ship_counter, fleet):
     if ship_counter == 0:
         WinCheck = True
     failCheck = False
-    for ship, values in fleet.items():
+    for values in fleet.values():
         for coordinate in values:
             if [row, column] == coordinate:
-                if values[0] == 2:
+                if values[-1] == 5:
                     if player_turns == True:
                         values.remove(coordinate)
                         shown_grid[row][column] = "C"
@@ -223,7 +219,7 @@ def win_check(shown_grid, row, column, player_turns, ship_counter, fleet):
                     print(f"There are {ship_counter} ships on the board.")
                     failCheck = True
                     break
-                elif len(values) == 4 and values[3] == 0:
+                elif values[-1] == 3:
                     if player_turn == True:
                         values.remove(coordinate)
                         shown_grid[row][column] = "C"
@@ -241,7 +237,7 @@ def win_check(shown_grid, row, column, player_turns, ship_counter, fleet):
                     print(f"There are {ship_counter} ships on the board.")
                     failCheck = True
                     break
-                elif values[0] == 3:
+                elif values[-1] == 4:
                     if player_turn == True:
                         values.remove(coordinate)
                         shown_grid[row][column] = "C"
@@ -259,7 +255,7 @@ def win_check(shown_grid, row, column, player_turns, ship_counter, fleet):
                     print(f"There are {ship_counter} ships on the board.")
                     failCheck = True
                     break
-                elif values[0] == 4:
+                elif values[-1] == 2:
                     if player_turn == True:
                         values.remove(coordinate)
                         shown_grid[row][column] = "C"
@@ -277,7 +273,7 @@ def win_check(shown_grid, row, column, player_turns, ship_counter, fleet):
                     print(f"There are {ship_counter} ships on the board.")
                     failCheck = True
                     break
-                elif values[0] == 5:
+                elif values[-1] == 1:
                     if player_turn == True:
                         values.remove(coordinate)
                         shown_grid[row][column] = "C"
@@ -374,8 +370,20 @@ if __name__ == "__main__":
     Ship_placement(player_grid, grid_size, player_fleet)
     Ship_placement(comp_grid, grid_size, computer_fleet)
 
-    
+    i = 1
+    for ship in player_fleet.keys():
+        player_fleet[ship].append(i)
+        i+=1
 
+    i = 1
+    for ship in computer_fleet.keys():
+        computer_fleet[ship].append(i)
+        i+=1
+
+
+    print(player_fleet)
+    print(" ")
+    print(computer_fleet)
     print(f"There are {num_ships} ships on the board.")
     print("If you hit a ship an C will be on the board, otherwise it will be an X.")
 
