@@ -65,8 +65,8 @@ def Ship_placement(grid, grid_size, fleet):
                         for dicSpotAdd in range(2):
                             coordList = [randomList - (dicSpotAdd + 1), randomSpot]
                             fleet["cruiser"].append(coordList)
+                        fleet["cruiser"].append(0)
                     else:
-                        # shipNumber += 1
                         for shipKey in fleet:
                             try:
                                 if fleet[shipKey][0] == shipNumber:
@@ -77,12 +77,10 @@ def Ship_placement(grid, grid_size, fleet):
                                         fleet[shipKey].append(coordList)
                             except:
                                 continue
-                        shipNumber += 1
-                                        
-                        
-                    
+                        shipNumber += 1 
                 else:
                     continue
+
             # 2 = up
             if randomDirection == 2:
                 for SpotAddCheck in range(shipNumber):
@@ -106,8 +104,8 @@ def Ship_placement(grid, grid_size, fleet):
                         for dicSpotAdd in range(2):
                             coordList = [randomList + (dicSpotAdd + 1), randomSpot]
                             fleet["cruiser"].append(coordList)
+                        fleet["cruiser"].append(0)
                     else:
-                        # shipNumber += 1
                         for shipKey in fleet:
                             try:
                                 if fleet[shipKey][0] == shipNumber:
@@ -145,8 +143,8 @@ def Ship_placement(grid, grid_size, fleet):
                         for dicSpotAdd in range(2):
                             coordList = [randomList, randomSpot + (dicSpotAdd + 1)]
                             fleet["cruiser"].append(coordList)
+                        fleet["cruiser"].append(0)
                     else:
-                        # shipNumber += 1
                         for shipKey in fleet:
                             try:
                                 if fleet[shipKey][0] == shipNumber:
@@ -164,7 +162,7 @@ def Ship_placement(grid, grid_size, fleet):
             if randomDirection == 4:
                 for SpotAddCheck in range(shipNumber):
                     try:
-                        if grid[randomList][randomSpot - (SpotAdd + 1)] != " ":
+                        if grid[randomList][randomSpot - (SpotAddCheck + 1)] != " ":
                             CoordCheck = False
                             break
                         else:
@@ -176,15 +174,15 @@ def Ship_placement(grid, grid_size, fleet):
                     coordList = [randomList, randomSpot]
                     grid[randomList][randomSpot] = 1
                     for SpotAdd in range(shipNumber):
-                        grid[randomList][randomSpot - (dicSpotAdd + 1)] = 1
+                        grid[randomList][randomSpot - (SpotAdd + 1)] = 1
                     if shipNumber == 2 and ship3Amount == 0:
                         ship3Amount = 1
                         fleet["cruiser"].append(coordList)
                         for dicSpotAdd in range(2):
                             coordList = [randomList, randomSpot - (dicSpotAdd + 1)]
                             fleet["cruiser"].append(coordList)
+                        fleet["cruiser"].append(0)
                     else:
-                        # shipNumber += 1
                         for shipKey in fleet:
                             try:
                                 if fleet[shipKey][0] == shipNumber:
@@ -199,47 +197,123 @@ def Ship_placement(grid, grid_size, fleet):
                 else:
                     continue
 
-def win_check(grid, shown_grid, row, column, player_turns, ship_counter, destroyer, fleet):
+def win_check(shown_grid, row, column, player_turns, ship_counter, destroyer, submarine, cruiser, battleship, carrier, fleet):
     WinCheck = False
     if ship_counter == 0:
         WinCheck = True
+    failCheck = False
+    for ship, values in fleet.items():
+        for coordinate in values:
+            if [row, column] == coordinate:
+                if len(values) == 2:
+                    if player_turns == True:
+                        destroyer -= 1
+                        shown_grid[row][column] = "C"
+                        print("\nCorrect. You hit a ship.")
+                        if destroyer == 0:
+                            print("You sank the enemy's Destroyer!")
+                            ship_counter -= 1
+                    else:
+                        destroyer -= 1
+                        shown_grid[row][column] = "C"
+                        print("\nCorrect. Computer hit a ship.")
+                        if destroyer == 0:
+                            print("Computer sank your Destroyer!")
+                            ship_counter -= 1
+                    print(f"There are {ship_counter} ships on the board.")
+                    failCheck = True
+                    break
+                elif values[3] == 0 and len(values) == 4:
+                    if player_turn == True:
+                        cruiser -= 1
+                        shown_grid[row][column] = "C"
+                        print("\nCorrect. You hit a ship.")
+                        if cruiser == 0:
+                            print("You sank the enemy's Cruiser!")
+                            ship_counter -= 1
+                    else:
+                        cruiser -=1
+                        shown_grid[row][column] = "C"
+                        print("\nCorrect. Computer hit a ship.")
+                        if cruiser == 0:
+                            print("Computer sank your Cruiser!")
+                            ship_counter -= 1
+                    print(f"There are {ship_counter} ships on the board.")
+                    failCheck = True
+                    break
+                elif len(values) == 3:
+                    if player_turn == True:
+                        submarine -= 1
+                        shown_grid[row][column] = "C"
+                        print("\nCorrect. You hit a ship.")
+                        if submarine == 0:
+                            print("You sank an enemy Submarine!")
+                            ship_counter -= 1
+                    else:
+                        submarine -=1
+                        shown_grid[row][column] = "C"
+                        print("\nCorrect. Computer hit a ship.")
+                        if submarine == 0:
+                            print("Computer sank your Submarine!")
+                            ship_counter -= 1
+                    print(f"There are {ship_counter} ships on the board.")
+                    failCheck = True
+                    break
+                elif len(values) == 4:
+                    if player_turn == True:
+                        battleship -= 1
+                        shown_grid[row][column] = "C"
+                        print("\nCorrect. You hit a ship.")
+                        if battleship == 0:
+                            print("You sank an enemy Battleship!")
+                            ship_counter -= 1
+                    else:
+                        battleship -=1
+                        shown_grid[row][column] = "C"
+                        print("\nCorrect. Computer hit a ship.")
+                        if battleship == 0:
+                            print("Computer sank your Battleship!")
+                            ship_counter -= 1
+                    print(f"There are {ship_counter} ships on the board.")
+                    failCheck = True
+                    break
+                elif len(values) == 5:
+                    if player_turn == True:
+                        carrier -= 1
+                        shown_grid[row][column] = "C"
+                        print("\nCorrect. You hit a ship.")
+                        if carrier == 0:
+                            print("You sank an enemy Carrier!")
+                            ship_counter -= 1
+                    else:
+                        carrier -=1
+                        shown_grid[row][column] = "C"
+                        print("\nCorrect. Computer hit a ship.")
+                        if carrier == 0:
+                            print("Computer sank your Carrier!")
+                            ship_counter -= 1
+                    print(f"There are {ship_counter} ships on the board.")
+                    failCheck = True
+                    break
 
-    elif grid[row][column] == " ":
+    if failCheck == False: 
         shown_grid[row][column] = "X"
-
         print("Missed")
         print(f"There are {ship_counter} ships on the board.")
-        
-    elif fleet["destroyer"] == [row][column] == 2:
-        
-        if player_turns == True:
-            destroyer -= 1
-            shown_grid[row][column] = "C"
-            if destroyer == 0:
-                print("\nCorrect. You sunk a destroyer ship!")
-                ship_counter -= 1
-            else:
-                print("\nCorrect. You partially hit a destroyer")
-        else:
-            destroyer -= 1
-            shown_grid[row][column] = "C"
-            if destroyer == 0:
-                print("Computer sunk the dingy ")
-                ship_counter -= 1
-            else:
-                print("Computer partially hit a dingy")
 
-        print(f"There are {ship_counter} ships on the board.")
-
-    return WinCheck, destroyer, ship_counter
+    return WinCheck, destroyer, submarine, cruiser, battleship, carrier, ship_counter
 
 def coordinate(grid_size, player_grid, comp_hidden_grid):
     check = True
     while check:
         user_guess = input("Please enter your guess (A,1): ")
         let = user_guess.split(",")
-        if len(user_guess) < 3 or int(user_guess[2]) == 0 or user_guess[1] != ",":
-            print("Please enter a valid guess")
+        try:
+            if len(user_guess) < 3 or int(user_guess[2]) == 0 or user_guess[1] != ",":
+                print("Please enter a valid guess")
+                continue
+        except:
+            print("Please enter a valid input.")
             continue
         try:
             check_let = ord(let[0])
@@ -287,8 +361,17 @@ if __name__ == "__main__":
     num_ships = 5
     ship_counter_player = num_ships
     destroyer_player = 2
+    submarine_player = 3
+    cruiser_player = 3
+    battleship_player = 4
+    carrier_player = 5
+
     ship_counter_computer = num_ships
     destroyer_computer = 2
+    submarine_computer = 3
+    cruiser_computer = 3
+    battleship_computer = 4
+    carrier_computer = 5
     player_turn = True
     grid_size = 10
 
@@ -311,8 +394,6 @@ if __name__ == "__main__":
         if i > grid_size:
             print(*row)
         i += 1
-    for playerKey in player_fleet:
-        print(player_fleet[playerKey])
     Ship_placement(comp_grid, grid_size, computer_fleet)
 
     print(f"There are {num_ships} ships on the board.")
@@ -353,7 +434,7 @@ if __name__ == "__main__":
             if let[0] == row_let:
                 rowindex = order_row + grid_size
 
-        winCheck, destroyer_player, ship_counter_player = win_check(comp_grid, comp_hidden_grid, rowindex, column, player_turn, ship_counter_player, destroyer_player, player_fleet)
+        winCheck, destroyer_player, submarine_player, cruiser_player, battleship_player, carrier_player, ship_counter_player = win_check(comp_hidden_grid, rowindex, column, player_turn, ship_counter_player, destroyer_player, submarine_player, cruiser_player, battleship_player, carrier_player, player_fleet)
 
         if ship_counter_player == 0:
             print("\nPlayer Board:")
@@ -388,7 +469,7 @@ if __name__ == "__main__":
         if player_turn == False:
             print("\nComputer's turn: ")
             print(f"Computer choose coordinate {comp_guess_letter}{comp_guess_spot}")
-            winCheck, destroyer_computer, ship_counter_computer = win_check(player_grid, player_grid, comp_guess_list, comp_guess_spot, player_turn, ship_counter_computer, destroyer_computer, computer_fleet)
+            winCheck, destroyer_computer, submarine_computer, cruiser_computer, battleship_computer, carrier_computer, ship_counter_computer = win_check(player_grid, comp_guess_list, comp_guess_spot, player_turn, ship_counter_computer, destroyer_computer, submarine_computer, cruiser_computer, battleship_computer, carrier_computer, computer_fleet)
 
             if ship_counter_computer == 0:
                 print("\nPlayer Board:")
