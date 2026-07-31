@@ -315,7 +315,7 @@ def coordinate(grid_size, player_grid, comp_grid):
             check_let = ord(let[0])
             check_let -= 64
             check_let += grid_size
-            if comp_grid[check_let][int(let[1])] == " " or comp_grid[check_let][int(let[1])] == 1 or comp_grid[check_let][int(let[1])] == 2:
+            if comp_grid[check_let][int(let[1])] == " ":
                 for letters in range(grid_size):
                     check_let = chr(64 + (letters + 1))
                     if check_let == let[0]:
@@ -349,7 +349,7 @@ def coordinate(grid_size, player_grid, comp_grid):
             if comp_guess_list == letter_order:
                 comp_guess_letter = row_lets
                 break
-        if player_grid[comp_guess_list][comp_guess_spot] ==  " " or player_grid[comp_guess_list][comp_guess_spot] == 1 or player_grid[comp_guess_list][comp_guess_spot] == 2:
+        if player_grid[comp_guess_list][comp_guess_spot] ==  " ":
             break
     return let, comp_guess_letter, comp_guess_list, comp_guess_spot
 
@@ -369,6 +369,14 @@ if __name__ == "__main__":
     
     Ship_placement(player_grid, grid_size, player_fleet)
     Ship_placement(comp_grid, grid_size, computer_fleet)
+    i = 0
+    for _ in comp_grid:
+        if i > grid_size:
+            for spot in range(11):
+                if comp_grid[i][spot] == 1:
+                    comp_grid[i][spot] = " "
+        i += 1
+    print(comp_grid)
 
     i = 1
     for ship in player_fleet.keys():
