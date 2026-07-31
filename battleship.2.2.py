@@ -349,7 +349,7 @@ def coordinate(grid_size, player_grid, comp_grid):
             if comp_guess_list == letter_order:
                 comp_guess_letter = row_lets
                 break
-        if player_grid[comp_guess_list][comp_guess_spot] ==  " ":
+        if player_grid[comp_guess_list][comp_guess_spot] ==  " " or player_grid[comp_guess_list][comp_guess_spot] == 1:
             break
     return let, comp_guess_letter, comp_guess_list, comp_guess_spot
 
