@@ -1,6 +1,7 @@
 # Battle ship 2.2 stage: Nate S and Trusha
 
 import random
+import time
 
 def create_board(grid_size):
     board = []
@@ -376,7 +377,6 @@ if __name__ == "__main__":
                 if comp_grid[i][spot] == 1:
                     comp_grid[i][spot] = " "
         i += 1
-    print(comp_grid)
 
     i = 1
     for ship in player_fleet.keys():
@@ -388,14 +388,11 @@ if __name__ == "__main__":
         computer_fleet[ship].append(i)
         i+=1
 
-
-    print(player_fleet)
-    print(" ")
-    print(computer_fleet)
     print(f"There are {num_ships} ships on the board.")
     print("If you hit a ship an C will be on the board, otherwise it will be an X.")
 
     while True:
+        time.sleep(2)
         print("\nPlayer Board:")
         i = 0
         first_row = ""
@@ -433,6 +430,7 @@ if __name__ == "__main__":
         winCheck, ship_counter_player = win_check(comp_grid, rowindex, column, player_turn, ship_counter_player, computer_fleet)
 
         if ship_counter_player == 0:
+            time.sleep(10)
             print("\nPlayer Board:")
             i = 0
             first_row = ""
@@ -468,6 +466,7 @@ if __name__ == "__main__":
             winCheck, ship_counter_computer = win_check(player_grid, comp_guess_list, comp_guess_spot, player_turn, ship_counter_computer, player_fleet)
 
             if ship_counter_computer == 0:
+                time.sleep(10)
                 print("\nPlayer Board:")
                 i = 0
                 first_row = ""
